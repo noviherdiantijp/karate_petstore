@@ -2,8 +2,8 @@ Feature: Recipe Request
 
   Background:
     * url "https://api.spoonacular.com/"
-    * def apiKey = 'e22c53945a604e34bf8799ec22a9f620'
-    * def hash = 'b8e7f1d65ab85813a10055503785d834a3a24521'
+    * def apiKey = '7685aa8c09a3437798fdf6d306bdccf2'
+    * def hash = 'b77beaf4786c5b7d594065ad19a3b23aacf620c8'
 
   Scenario: Get Random Recipes
     Given path 'recipes/random'
