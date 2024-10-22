@@ -5,8 +5,8 @@ Feature: rapid API Test
     * def xRapidapiHost = 'tasty.p.rapidapi.com'
     * def xRapidapiKey = 'ee4040eba9mshd9033f2f5c40952p1345ccjsna5f8ea3610c3'
 
-  Scenario: Get Auto Complete
-    Given path 'recipes/auto-complete'
+  Scenario: Get List
+    Given path 'recipes/list'
     And header Content-Type = 'application/json'
     And header x-rapidapi-host = xRapidapiHost
     And header x-rapidapi-key = xRapidapiKey
@@ -15,20 +15,11 @@ Feature: rapid API Test
     And param tags = 'under_30_minutes'
     When method get
     Then status 200
-    And response.count !== empty
+    And match response.count == 2376
+    And match response.results != ''
     And print response
 
-  Scenario: Get List
-    Given path 'recipes/list'
-    And header Content-Type = 'application/json'
-    And header x-rapidapi-host = xRapidapiHost
-    And header x-rapidapi-key = xRapidapiKey
-    And param prefix = 'chicken soup'
-    When method get
-    Then status 200
-    And print response
-
-  Scenario: Get List Similarities
+  Scenario: Success Get List Similarities
     Given path 'recipes/list-similarities'
     And header Content-Type = 'application/json'
     And header x-rapidapi-host = xRapidapiHost
@@ -37,6 +28,17 @@ Feature: rapid API Test
     When method get
     Then status 200
     And print response
+
+  Scenario: Invalid Get List Similarities when recipe_id is empty
+    Given path 'recipes/list-similarities'
+    And header Content-Type = 'application/json'
+    And header x-rapidapi-host = xRapidapiHost
+    And header x-rapidapi-key = xRapidapiKey
+    And param recipe_id = ''
+    When method get
+    Then status 200
+    And match response.message == 'Bad Request'
+    And print response.errors[0].recipe_id[0] == 'Not a valid integer'
 
   Scenario: Get More Info
     Given path 'recipes/get-more-info'
@@ -59,4 +61,28 @@ Feature: rapid API Test
     When method get
     Then status 200
     And print response
+
+  Scenario: Get Tag List
+    Given path 'tags/list'
+    And header Content-Type = 'application/json'
+    And header x-rapidapi-host = xRapidapiHost
+    And header x-rapidapi-key = xRapidapiKey
+    When method get
+    Then status 200
+    And print response
+
+  Scenario: Get Feeds List
+    Given path 'feeds/list'
+    And header Content-Type = 'application/json'
+    And header x-rapidapi-host = xRapidapiHost
+    And header x-rapidapi-key = xRapidapiKey
+    And param timezone = '%2B0700'
+    And param size = 5
+    And param vegetarian = false
+    And param from = 0
+    When method get
+    Then status 200
+    And print response
+
+
 
